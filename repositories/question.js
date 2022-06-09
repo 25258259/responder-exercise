@@ -1,5 +1,4 @@
-const { readFileSync, writeFile, writeFileSync } = require('fs')
-const { readFile } = require('fs/promises')
+const { readFile, writeFile } = require('fs/promises')
 const { get } = require('http')
 const uuid = require('uuid')
 
@@ -11,9 +10,9 @@ const makeQuestionRepository = fileName => {
     return questions
   }
 
-  const setQuestions = questions => {
+  const setQuestions = async questions => {
     const questionsToWrite = JSON.stringify(questions, null, '\t')
-    writeFileSync(fileName, questionsToWrite)
+    await writeFile(fileName, questionsToWrite)
   }
 
   const getQuestionById = async questionId => {
@@ -119,7 +118,7 @@ const makeQuestionRepository = fileName => {
       }
       return question
     })
-    setQuestions(newQuestions)
+    await setQuestions(newQuestions)
 
     return { code: 201, question: newQuestion }
   }
